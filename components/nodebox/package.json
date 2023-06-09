@@ -1,0 +1,31 @@
+{
+  "name": "@components/nodebox",
+  "version": "0.0.0",
+  "description": "",
+  "author": "Brian Jenkins",
+  "license": "MIT",
+  "main": "index.ts",
+  "types": "index.ts",
+  "type": "module",
+  "scripts": {},
+  "dependencies": {},
+  "peerDependencies": {
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist/"
+  ],
+  "sideEffects": false
+}
