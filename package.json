@@ -7,8 +7,9 @@
   "license": "MIT",
   "scripts": {
     "build": "tsup public/js/main.tsx --format esm --treeshake --outDir public/js/",
-    "start": "nodemon --ext ts,tsx --ignore dist --exec \"npm run build && node --experimental-specifier-resolution=node --loader=ts-node/esm server.ts\"",
-    "test": "echo \"Error: no test specified\""
+    "start": "nodemon --ext ts,tsx --ignore dist --exec \"node --experimental-specifier-resolution=node --loader=ts-node/esm server.ts\"",
+    "test": "echo \"Error: no test specified\"",
+    "tree": "node --experimental-specifier-resolution=node --loader=ts-node/esm tree.ts"
   },
   "devDependencies": {
     "@tsconfig/node-lts": "latest",
