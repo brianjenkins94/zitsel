@@ -15,10 +15,13 @@ server.use(helmet({
 	"contentSecurityPolicy": {
 		"directives": {
 			...helmet.contentSecurityPolicy.getDefaultDirectives(),
-			"default-src": ["'self'", "https://*.codesandbox.io/"],
-			"script-src": ["'self'", "https:"]
+			"default-src": ["'self'", "https://*.codesandbox.io/", "https://*.stackblitz.com/", "https://*.staticblitz.com/"],
+			"script-src": ["'self'", "https:", "'unsafe-eval'"],
+			"worker-src": ["blob:"]
 		}
-	}
+	},
+	"crossOriginEmbedderPolicy": true,
+	"crossOriginResourcePolicy": { "policy": "same-site" }
 }));
 
 server.set("json spaces", 4);
