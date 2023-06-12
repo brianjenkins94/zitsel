@@ -16,6 +16,7 @@ export async function get(request, response) {
 		...files,
 		"public/js/main.js": "console.log(\"TBD\");",
 		"package.json": JSON.stringify({
+			"type": "module",
 			"dependencies": {
 				"express": "latest"
 			}

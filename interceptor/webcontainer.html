@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta name="description" content="" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+	<iframe id="preview-iframe"></iframe>
+	<script type="module">
+		import { WebContainer } from "https://cdn.jsdelivr.net/npm/@webcontainer/api/dist/index.min.js";
+
+		window.WEBCONTAINER_API_IFRAME_URL = new URL("../public/vendor/stackblitz/headless.html", location.href);
+
+		const previewIframe = document.getElementById("preview-iframe");
+
+        const webContainer = await WebContainer.boot();
+
+        const index = `
+			import * as http from "http";
+
+			const router = {
+				"/": function(request, response) {
+					return {
+						"statusCode": 200,
+						"headers": {
+							"Content-Type": "text/html"
+						},
+						"body": "</scr" + "ipt><scr" + "ipt src=\\"/Loader.js\\"></scr" + "ipt>"
+					};
+				},
+				"/Loader.js": function(request, response) {
+					return {
+						"statusCode": 200,
+						"headers": {
+							"Content-Type": "text/javascript"
+						},
+						"body": "document.write(\\"OK\\");"
+					};
+				}
+			};
+
+			http.createServer(function(request, response) {
+				const startTime = performance.now();
+
+				response.on("finish", function() {
+					console.log(request.method, request.url, response.statusCode, (performance.now() - startTime).toFixed(3), "ms");
+				});
+
+				try {
+					let statusCode = 404;
+					let headers = { "Content-Type": "text/plain" };
+					let body = "File not found";
+
+					const pathName = request.url.split("?")[0];
+
+					if (request.method === "GET" && router[pathName] !== undefined) {
+						({ statusCode, headers, body } = router[pathName](request, response));
+					}
+
+					response.writeHead(statusCode, headers);
+					response.end(body);
+				} catch (error) {
+					console.error(error);
+
+					response.writeHead(500, { "Content-Type": "text/plain" });
+					response.end("Internal server error");
+				}
+			}).listen(8000, function() {
+				console.log("> Ready on 8000");
+			});
+		`.trim()
+
+        await webContainer.mount({
+            "package.json": JSON.stringify({
+                "type": "module"
+            }),
+            "index.js": {
+                "contents": index
+            }
+        });
+
+        const installProcess = await webContainer.spawn("npm", ["install"]);
+
+        const installExitCode = await installProcess.exit;
+
+        if (installExitCode !== 0) {
+            throw new Error("Unable to run npm install");
+        }
+
+        await webContainer.spawn("node", ["index.js"]);
+
+        webContainer.on("server-ready", function(port, url) {
+            previewIframe.src = url;
+        });
+	</script>
+</body>
+</html>

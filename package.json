@@ -7,22 +7,25 @@
   "license": "MIT",
   "scripts": {
     "build": "tsup public/js/main.tsx --format esm --treeshake --outDir public/js/",
+    "prebuild": "node --experimental-specifier-resolution=node --loader=ts-node/esm interceptor",
     "start": "nodemon --ext ts,tsx --ignore dist --exec \"node --experimental-specifier-resolution=node --loader=ts-node/esm server.ts\"",
     "test": "echo \"Error: no test specified\"",
-    "tree": "node --experimental-specifier-resolution=node --loader=ts-node/esm tree.ts"
+    "tree": "node --experimental-specifier-resolution=node --loader=ts-node/esm util/tree.ts"
   },
   "devDependencies": {
     "@tsconfig/node-lts": "latest",
     "@types/node": "latest",
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "latest",
+    "cheerio": "latest",
     "eslint": "latest",
     "express": "latest",
     "helmet": "latest",
     "morgan": "latest",
     "nodemon": "latest",
-    "react": "latest",
+    "playwright-chromium": "latest",
     "react-dom": "latest",
+    "react": "latest",
     "ts-node": "latest",
     "tsup": "latest",
     "typescript": "latest",
