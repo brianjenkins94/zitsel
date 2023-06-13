@@ -31,22 +31,21 @@ async function writeFileIfChanged(filePath, data) {
 	}
 }
 
-
-function download({ onIntercept, vendorDirectory }: { onIntercept: (filePath, data) => [string, Buffer | string]; vendorDirectory }) {
+function download({ fallbackDomain, onIntercept, vendorDirectory }: { fallbackDomain; onIntercept: (filePath, data) => [string, Buffer | string]; vendorDirectory }) {
 	return async function(response) {
-		const { hostname, pathname } = new URL(response.url());
-
-		if (hostname === "") {
-			return;
-		}
+		let { hostname, pathname } = new URL(response.url());
 
 		// WARN: This is not perfect.
-		const [subdomain, domain, tld] = Array.from({ ...hostname.split(".").reverse(), "length": 3 }).reverse();
+		let [subdomain, domain, tld] = Array.from({ ...hostname.split(".").reverse(), "length": 3 }).reverse();
+		domain ??= fallbackDomain;
 
 		let baseName = path.basename(pathname);
 		//const pathName = path.join(pathname.slice(0, -baseName.length));
+
+		// <Needed>?
 		baseName = baseName.replace(/[-.]\w+\./gu, ".");
 		baseName ||= hostname.includes("nodebox-runtime.codesandbox.io") ? "bridge.html" : "preview.html";
+		// </Needed>
 
 		if (baseName === path.basename(baseName, path.extname(baseName)) && response.headers()["Content-Type".toLowerCase()]?.includes("text/html")) {
 			baseName += ".html";
@@ -63,8 +62,9 @@ function download({ onIntercept, vendorDirectory }: { onIntercept: (filePath, da
 
 			writeFileIfChanged(...onIntercept(filePath, data));
 		} catch (error) {
-			if (!(error instanceof TypeError)) {
-				console.error(error);
+			// FIXME: Shouldn't use errors for flow control
+			if (!/response.text is not a function|is unavailable|no resource with given identifier/ui.test(error.message)) {
+				throw error;
 			}
 
 			try {
@@ -78,7 +78,11 @@ function download({ onIntercept, vendorDirectory }: { onIntercept: (filePath, da
 					writeFileIfChanged(filePath, new Uint8Array(data));
 				}
 			} catch (error) {
-				console.error("Really failed to get " + response.url());
+				if (!/did not match/ui.test(error.message)) {
+					console.error("Really failed to get " + response.url());
+				} else {
+					throw error;
+				}
 			}
 		}
 	};
@@ -102,7 +106,10 @@ export async function intercept(url, { precondition, onIntercept, vendorDirector
 
 	context ??= await browser.newContext();
 
+	const fallbackDomain = path.basename(new URL(".", url).pathname)
+
 	context.on("serviceworker", download({
+		"fallbackDomain": fallbackDomain,
 		"onIntercept": onIntercept,
 		"vendorDirectory": vendorDirectory
 	}));
@@ -110,6 +117,7 @@ export async function intercept(url, { precondition, onIntercept, vendorDirector
 	const page: Page = await context.newPage();
 
 	page.on("response", download({
+		"fallbackDomain": fallbackDomain,
 		"onIntercept": onIntercept,
 		"vendorDirectory": vendorDirectory
 	}));
