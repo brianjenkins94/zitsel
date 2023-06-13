@@ -75,11 +75,11 @@ const addresses = {
 			return page.frameLocator("#preview-iframe").getByText("OK").click();
 		},
 		"onIntercept": function(filePath, data) {
-			const fileName = path.basename(filePath);
+			let fileName = path.basename(filePath);
 
 			// WARN: This is not perfect.
-			//fileName = fileName.replace(/[-.]\w+(?=\.\w+$)/u, "");
-			//fileName ||= hostname.includes("nodebox-runtime.codesandbox.io") ? "bridge.html" : "preview.html";
+			fileName = fileName.replace(/[-.]\w+(?=\.\w+$)/u, "");
+			filePath = path.join(path.dirname(filePath), fileName);
 
 			if (fileName.endsWith(".html")) {
 				return [filePath, prune(data, {
@@ -90,7 +90,7 @@ const addresses = {
 				})];
 			}
 
-			const substitutions = {
+			const allowlist = {
 				"runtime.js": [
 					{
 						"example": "worker-praeod644nej8ndeqhk4g54xnwdwekw.js",
@@ -184,14 +184,16 @@ const addresses = {
 						"from": /(?<=return )_0x\w{6}===_0x\w{6}\?_0x\w{6}\(_0x\w{6}\[_0x\w{6}\(0x\w{2}\)\]\):null(?=;)/u,
 						"to": "8000"
 					}
-				]
+				],
+				"brotli_wasm_bg.wasm": [],
+				"worker.js": []
 			};
 
-			if (substitutions[fileName] === undefined) {
+			if (allowlist[fileName] === undefined) {
 				return [];
 			}
 
-			for (const substitution of substitutions[fileName]) {
+			for (const substitution of allowlist[fileName]) {
 				data = replace(data, substitution);
 			}
 
@@ -230,40 +232,45 @@ const addresses = {
 				return [];
 			}
 
-			// WARN: This is not perfect.
-			fileName = fileName.replace(/[-.]\w+(?=\.\w+$)/u, "");
 			filePath = path.join(path.dirname(filePath).replace(/staticblitz/u, "stackblitz"), fileName);
+
+			if (!fileName.includes("a12d8c69")) {
+				// WARN: This is not perfect.
+				fileName = fileName.replace(/[-.]\w+(?=\.\w+$)/u, "");
+				filePath = path.join(path.dirname(filePath), fileName);
+			}
 
 			if (fileName === "headless.html") {
 				return [filePath, prune(data, {
 					"prepend": [
-						"<link href=\"https://cdn.jsdelivr.net/npm/modern-normalize/modern-normalize.min.css\" rel=\"stylesheet\" />",
-						"<base href=\"/vendor/stackblitz/\" />"
+						"<link href=\"https://cdn.jsdelivr.net/npm/modern-normalize/modern-normalize.min.css\" rel=\"stylesheet\" />"
 					].join("")
 				})];
 			}
 
-			const substitutions = {
-				"fetch.worker.js": [],
+			const allowlist = {
+				"fetch.worker.a12d8c69.js": [],
 				"headless.js": [],
-				"webcontainer.js": []
+				"webcontainer.js": [],
+				"bin_index.a12d8c69": []
 			};
 
-			if (substitutions[fileName] !== undefined) {
-				for (const substitution of substitutions[fileName]) {
-					data = replace(data, substitution);
-				}
-			} else {
+			if (allowlist[fileName] === undefined) {
 				return [];
+			}
+
+			for (const substitution of allowlist[fileName]) {
+				data = replace(data, substitution);
 			}
 
 			return [filePath, data];
 		},
 		"postcondition": function(vendorDirectory) {
 			const files = [
+				"bin_index.a12d8c69",
+				"fetch.worker.a12d8c69.js",
 				"headless.html",
-				"webcontainer.js",
-				"fetch.worker.js"
+				"webcontainer.js"
 			];
 
 			const results = files.map(function(fileName) {
@@ -286,15 +293,15 @@ const addresses = {
 				return [filePath, prune(data)];
 			}
 
-			const substitutions = {
+			const allowlist = {
 
 			};
 
-			if (substitutions[fileName] === undefined) {
+			if (allowlist[fileName] === undefined) {
 				return [];
 			}
 
-			for (const substitution of substitutions[fileName]) {
+			for (const substitution of allowlist[fileName]) {
 				data = replace(data, substitution);
 			}
 
@@ -322,7 +329,7 @@ await fs.mkdir(vendorDirectory, { "recursive": true });
 
 let destroy;
 
-for (let [href, { precondition, onIntercept, postcondition }] of Object.entries(addresses).slice(1)) {
+for (let [href, { precondition, onIntercept, postcondition }] of Object.entries(addresses)) {
 	try {
 		// eslint-disable-next-line no-new
 		new URL(href);

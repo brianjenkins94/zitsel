@@ -45,6 +45,9 @@ function download({ fallbackDomain, onIntercept, vendorDirectory }: { fallbackDo
 
 		let baseName = path.basename(pathname);
 
+		// TODO: Find a way to move this into the onIntercept handler.
+		baseName ||= hostname.includes("nodebox-runtime.codesandbox.io") ? "bridge.html" : "preview.html";
+
 		if (baseName === path.basename(baseName, path.extname(baseName)) && response.headers()["Content-Type".toLowerCase()]?.includes("text/html")) {
 			baseName += ".html";
 		}
