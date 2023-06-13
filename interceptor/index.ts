@@ -69,6 +69,8 @@ function prune(data, options = {}) {
 	return $.html();
 }
 
+let indexCount = 0;
+
 const addresses = {
 	"codesandbox/nodebox.html": {
 		"precondition": function(page: Page) {
@@ -79,6 +81,17 @@ const addresses = {
 
 			// WARN: This is not perfect.
 			fileName = fileName.replace(/[-.]\w+(?=\.\w+$)/u, "");
+
+			if (fileName === "index.html") {
+				if (indexCount === 1) {
+					fileName = "bridge.html";
+				} else if (indexCount === 2) {
+					fileName = "preview.html";
+				}
+
+				indexCount += 1;
+			}
+
 			filePath = path.join(path.dirname(filePath), fileName);
 
 			if (fileName.endsWith(".html")) {
@@ -328,6 +341,12 @@ const vendorDirectory = path.join(__root, "public", "vendor");
 await fs.mkdir(vendorDirectory, { "recursive": true });
 
 let destroy;
+
+for (const signal of ["SIGINT", "SIGUSR1", "SIGUSR2"]) {
+	process.on(signal, function() {
+		destroy?.();
+	});
+}
 
 for (let [href, { precondition, onIntercept, postcondition }] of Object.entries(addresses)) {
 	try {
