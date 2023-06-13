@@ -77,6 +77,10 @@ const addresses = {
 		"onIntercept": function(filePath, data) {
 			const fileName = path.basename(filePath);
 
+			// WARN: This is not perfect.
+			//fileName = fileName.replace(/[-.]\w+(?=\.\w+$)/u, "");
+			//fileName ||= hostname.includes("nodebox-runtime.codesandbox.io") ? "bridge.html" : "preview.html";
+
 			if (fileName.endsWith(".html")) {
 				return [filePath, prune(data, {
 					"prepend": [
@@ -154,6 +158,8 @@ const addresses = {
 						"from": /\/__csb_runtime(\.\w+)?\.js/u,
 						"to": "__csb_runtime.js"
 					},
+					// These final two add an escape hatch for proxying requests outside of the nodebox.
+					// They are only needed when serving from localhost.
 					{
 						"example": "if(_0x5c948f[_0x10fc7d(0x103)][_0x10fc7d(0xd1)](_0x10fc7d(0xd5)))",
 						"doc": "       ^-----------------------------------------------------------^",
@@ -164,7 +170,7 @@ const addresses = {
 					},
 					{
 						"example": "let _0x5a79f9=_0x3c9189(_0x5c948f,location);if(_0x5a79f9==null||isNaN(_0x5a79f9))",
-						"doc": "                                      ^------^    ><",
+						"doc": "                            ^-------^             ><",
 						"from": /(?<=let _0x\w{6}=_0x\w{6}\((_0x\w{6}),location\);if\()(?=_0x\w{6}==null\|\|isNaN\(_0x\w{6}\)\))/u,
 						"to": function(_, url) {
 							return url + ".pathname.startsWith('/TypeCraft/proxy/escape-hatch')||";
@@ -174,17 +180,19 @@ const addresses = {
 				"__csb_runtime.js": [
 					{
 						"example": "return _0x341822===_0x3d7a43?_0x2cb0c0(_0x40106d[_0x3e6327(0xc1)]):null;",
-						"doc": "          ^--------------------------------------------------------------^",
+						"doc": "           ^--------------------------------------------------------------^",
 						"from": /(?<=return )_0x\w{6}===_0x\w{6}\?_0x\w{6}\(_0x\w{6}\[_0x\w{6}\(0x\w{2}\)\]\):null(?=;)/u,
 						"to": "8000"
 					}
 				]
 			};
 
-			if (substitutions[fileName] !== undefined) {
-				for (const substitution of substitutions[fileName]) {
-					data = replace(data, substitution);
-				}
+			if (substitutions[fileName] === undefined) {
+				return [];
+			}
+
+			for (const substitution of substitutions[fileName]) {
+				data = replace(data, substitution);
 			}
 
 			return [filePath, data];
@@ -216,17 +224,46 @@ const addresses = {
 			return page.frameLocator("iframe[title='Preview page']").frameLocator("#app iframe").getByText("Welcome to a WebContainers app! 🥳").click();
 		},
 		"onIntercept": function(filePath, data) {
-			const fileName = path.basename(filePath);
+			let fileName = path.basename(filePath);
 
-			if (fileName !== "headless.html") {
+			if (!filePath.endsWith(path.join("blitz", fileName))) {
 				return [];
 			}
 
-			return [filePath, prune(data)];
+			// WARN: This is not perfect.
+			fileName = fileName.replace(/[-.]\w+(?=\.\w+$)/u, "");
+			filePath = path.join(path.dirname(filePath).replace(/staticblitz/u, "stackblitz"), fileName);
+
+			if (fileName === "headless.html") {
+				return [filePath, prune(data, {
+					"prepend": [
+						"<link href=\"https://cdn.jsdelivr.net/npm/modern-normalize/modern-normalize.min.css\" rel=\"stylesheet\" />",
+						"<base href=\"/vendor/stackblitz/\" />"
+					].join("")
+				})];
+			}
+
+			const substitutions = {
+				"fetch.worker.js": [],
+				"headless.js": [],
+				"webcontainer.js": []
+			};
+
+			if (substitutions[fileName] !== undefined) {
+				for (const substitution of substitutions[fileName]) {
+					data = replace(data, substitution);
+				}
+			} else {
+				return [];
+			}
+
+			return [filePath, data];
 		},
 		"postcondition": function(vendorDirectory) {
 			const files = [
-				"headless.html"
+				"headless.html",
+				"webcontainer.js",
+				"fetch.worker.js"
 			];
 
 			const results = files.map(function(fileName) {
@@ -253,10 +290,12 @@ const addresses = {
 
 			};
 
-			if (substitutions[fileName] !== undefined) {
-				for (const substitution of substitutions[fileName]) {
-					data = replace(data, substitution);
-				}
+			if (substitutions[fileName] === undefined) {
+				return [];
+			}
+
+			for (const substitution of substitutions[fileName]) {
+				data = replace(data, substitution);
 			}
 
 			return [filePath, data];

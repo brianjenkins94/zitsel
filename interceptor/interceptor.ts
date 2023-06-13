@@ -14,6 +14,10 @@ async function writeFileIfChanged(filePath, data) {
 		return;
 	}
 
+	if (!existsSync(path.dirname(filePath))) {
+		await fs.mkdir(path.dirname(filePath), { "recursive": true });
+	}
+
 	if (!existsSync(filePath)) {
 		console.log("Saving " + filePath);
 
@@ -33,29 +37,19 @@ async function writeFileIfChanged(filePath, data) {
 
 function download({ fallbackDomain, onIntercept, vendorDirectory }: { fallbackDomain; onIntercept: (filePath, data) => [string, Buffer | string]; vendorDirectory }) {
 	return async function(response) {
-		let { hostname, pathname } = new URL(response.url());
+		const { hostname, pathname } = new URL(response.url());
 
 		// WARN: This is not perfect.
 		let [subdomain, domain, tld] = Array.from({ ...hostname.split(".").reverse(), "length": 3 }).reverse();
 		domain ??= fallbackDomain;
 
 		let baseName = path.basename(pathname);
-		//const pathName = path.join(pathname.slice(0, -baseName.length));
-
-		// <Needed>?
-		baseName = baseName.replace(/[-.]\w+\./gu, ".");
-		baseName ||= hostname.includes("nodebox-runtime.codesandbox.io") ? "bridge.html" : "preview.html";
-		// </Needed>
 
 		if (baseName === path.basename(baseName, path.extname(baseName)) && response.headers()["Content-Type".toLowerCase()]?.includes("text/html")) {
 			baseName += ".html";
 		}
 
 		const filePath = path.join(vendorDirectory, domain, baseName);
-
-		if (!existsSync(path.dirname(filePath))) {
-			return;
-		}
 
 		try {
 			const data = await response.text();
@@ -75,7 +69,7 @@ function download({ fallbackDomain, onIntercept, vendorDirectory }: { fallbackDo
 				} else {
 					const data = await (await fetch(response.url())).arrayBuffer();
 
-					writeFileIfChanged(filePath, new Uint8Array(data));
+					writeFileIfChanged(...onIntercept(filePath, new Uint8Array(data)));
 				}
 			} catch (error) {
 				if (!/did not match/ui.test(error.message)) {
@@ -106,7 +100,7 @@ export async function intercept(url, { precondition, onIntercept, vendorDirector
 
 	context ??= await browser.newContext();
 
-	const fallbackDomain = path.basename(new URL(".", url).pathname)
+	const fallbackDomain = path.basename(new URL(".", url).pathname);
 
 	context.on("serviceworker", download({
 		"fallbackDomain": fallbackDomain,
