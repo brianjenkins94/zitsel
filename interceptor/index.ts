@@ -19,6 +19,18 @@ function replace(input: string, { example, doc, from, to }: { example; doc; from
 		throw new Error("No `doc` provided for `" + from.toString() + "`!");
 	}
 
+	const [stretch] = /\^-+\^/ui.exec(doc) || [];
+
+	if (stretch !== undefined) {
+		example = example.replace(from, stretch);
+
+		if (!example.includes(stretch)) {
+			throw new Error("`doc` did not match `example` for " + from.toString() + "!");
+		}
+	} else {
+		console.warn("Could not test `doc` against `example` for " + from.toString() + ".");
+	}
+
 	const globalPattern = new RegExp(from.source, [...new Set(["g", ...from.flags])].join(""));
 
 	const matches = (input.match(globalPattern) || []).length;
@@ -30,7 +42,7 @@ function replace(input: string, { example, doc, from, to }: { example; doc; from
 	const output = input.replace(from, to);
 
 	if (matches === (output.match(globalPattern) || []).length) {
-		throw new Error("Match count did not change!");
+		throw new Error("Match count did not change for " + from.toString() + "!");
 	}
 
 	return output;
@@ -255,17 +267,62 @@ const addresses = {
 			}
 
 			if (fileName === "headless.html") {
-				return [filePath, prune(data, {
+				data = prune(data, {
 					"prepend": [
 						"<link href=\"https://cdn.jsdelivr.net/npm/modern-normalize/modern-normalize.min.css\" rel=\"stylesheet\" />"
 					].join("")
-				})];
+				});
 			}
 
 			const allowlist = {
 				"fetch.worker.a12d8c69.js": [],
-				"headless.js": [],
-				"webcontainer.js": [],
+				"headless.html": [
+					{
+						"example": "webcontainer.js",
+						"doc": "    ^-------------^",
+						"from": /webcontainer\.js/u,
+						"to": "webcontainer.a12d8c69.js"
+					}
+				],
+				"headless.js": [
+					{
+						"example": "n.embedder",
+						"doc": "    ^--------^",
+						"from": /n\.embedder/gu,
+						"to": "location.origin"
+					},
+					{
+						"example": "n.baseUrl",
+						"doc": "    ^-------^",
+						"from": /n\.baseUrl/u,
+						"to": "location.origin"
+					},
+					{
+						"example": "n.serverUrl",
+						"doc": "    ^---------^",
+						"from": /n\.serverUrl/u,
+						"to": "location.origin"
+					},
+					{
+						"example": "n.serverVersion",
+						"doc": "    ^-------------^",
+						"from": /n\.serverVersion/u,
+						"to": "'a12d8c69'"
+					},
+					{
+						"example": "n.version",
+						"doc": "    ^-------^",
+						"from": /n\.version/u,
+						"to": "'a12d8c69'"
+					},
+					{
+						"example": "n.isolationPolicy",
+						"doc": "    ^---------------^",
+						"from": /n.isolationPolicy/u,
+						"to": "'require-corp'"
+					},
+				],
+				"webcontainer.a12d8c69.js": [],
 				"bin_index.a12d8c69": []
 			};
 
@@ -284,7 +341,7 @@ const addresses = {
 				"bin_index.a12d8c69",
 				"fetch.worker.a12d8c69.js",
 				"headless.html",
-				"webcontainer.js"
+				"webcontainer.a12d8c69.js"
 			];
 
 			const results = files.map(function(fileName) {
@@ -307,9 +364,7 @@ const addresses = {
 				return [filePath, prune(data)];
 			}
 
-			const allowlist = {
-
-			};
+			const allowlist = {};
 
 			if (allowlist[fileName] === undefined) {
 				return [];
