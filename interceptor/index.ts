@@ -329,7 +329,19 @@ const addresses = {
 						"example": "_0x3f0493=[new URL('/bin_index.a12d8c69',_0x122f9f)['href'],...null!=_0x467f25?_0x467f25:[]];",
 						"doc": "               ^------------------------------------------------------------------------------^",
 						"from": /(?<=_0x\w{6}=\[)new URL\(.*?(?=\];)/u,
-						"to": "location.origin + '/vendor/stackblitz/bin_index.a12d8c69'"
+						"to": "location.origin + '/w-corp.staticblitz/bin_index.a12d8c69'"
+					},
+					{
+						"example": "'https://t.staticblitz.com",
+						"doc": "    ^------------------------^",
+						"from": /'https:\/\/t\.staticblitz\.com/u,
+						"to": "location.origin + '/t.staticblitz"
+					},
+					{
+						"example": "'/fetch.worker.a12d8c69.js'",
+						"doc": "    ^------------------------^",
+						"from": /'\/fetch\.worker\.a12d8c69\.js/u,
+						"to": "'/w-corp.staticblitz/fetch.worker.a12d8c69.js"
 					}
 				],
 				"bin_index.a12d8c69": []

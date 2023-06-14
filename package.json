@@ -21,6 +21,7 @@
     "eslint": "latest",
     "express": "latest",
     "helmet": "latest",
+    "http-proxy-middleware": "latest",
     "morgan": "latest",
     "nodemon": "latest",
     "playwright-chromium": "latest",

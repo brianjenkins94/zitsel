@@ -1,3 +1,4 @@
+import { createProxyMiddleware } from "http-proxy-middleware";
 import * as fs from "fs";
 import * as path from "path";
 import * as url from "url";
@@ -106,6 +107,38 @@ async function bindRoutes(routesDirectory) {
 }
 
 await bindRoutes(path.join(__root, "routes"));
+
+/*
+server.use("/staticblitz", createProxyMiddleware({
+	"pathRewrite": {
+		"^/staticblitz": ""
+	},
+	"target": "https://staticblitz.com",
+	"changeOrigin": true
+}));
+*/
+
+server.use("/t.staticblitz", createProxyMiddleware({
+	"pathRewrite": {
+		"^/t.staticblitz": ""
+	},
+	"target": "https://t.staticblitz.com",
+	"changeOrigin": true
+}));
+
+server.use("/w-corp.staticblitz", createProxyMiddleware({
+	"pathRewrite": {
+		"^/w-corp.staticblitz": ""
+	},
+	"target": "https://w-corp.staticblitz.com",
+	"changeOrigin": true
+}));
+
+server.get("/.localservice@preview.shared_worker.a12d8c69.js", async function(request, response) {
+	//response.setHeader("Content-Type", "text/javascript");
+	response.type(".js");
+	response.send(await (await fetch("https://local.webcontainer.io/.localservice@preview.shared_worker.a12d8c69.js")).text());
+});
 
 server.listen(new URL(BASE_URL).port, function() {
 	console.log("> Ready on " + BASE_URL);
