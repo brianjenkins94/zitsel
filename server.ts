@@ -15,9 +15,9 @@ server.use(helmet({
 	"contentSecurityPolicy": {
 		"directives": {
 			...helmet.contentSecurityPolicy.getDefaultDirectives(),
-			"default-src": ["'self'", "https://*.codesandbox.io/", "https://*.stackblitz.com/"],
+			"default-src": ["'self'", "https://*.codesandbox.io/", "https://*.stackblitz.com/", "https://*.staticblitz.com/"],
 			"script-src": ["'self'", "https:", "'unsafe-eval'"],
-			"worker-src": ["blob:"]
+			"worker-src": ["'self'", "blob:"]
 		}
 	},
 	"crossOriginEmbedderPolicy": true

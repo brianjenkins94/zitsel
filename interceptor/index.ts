@@ -269,7 +269,8 @@ const addresses = {
 			if (fileName === "headless.html") {
 				data = prune(data, {
 					"prepend": [
-						"<link href=\"https://cdn.jsdelivr.net/npm/modern-normalize/modern-normalize.min.css\" rel=\"stylesheet\" />"
+						"<link href=\"https://cdn.jsdelivr.net/npm/modern-normalize/modern-normalize.min.css\" rel=\"stylesheet\" />",
+						"<base href=\"/vendor/stackblitz/\" />"
 					].join("")
 				});
 			}
@@ -295,13 +296,13 @@ const addresses = {
 						"example": "n.baseUrl",
 						"doc": "    ^-------^",
 						"from": /n\.baseUrl/u,
-						"to": "location.origin"
+						"to": "'https://w-corp.staticblitz.com'"
 					},
 					{
 						"example": "n.serverUrl",
 						"doc": "    ^---------^",
 						"from": /n\.serverUrl/u,
-						"to": "location.origin"
+						"to": "'https://local-corp.webcontainer.io'"
 					},
 					{
 						"example": "n.serverVersion",
@@ -353,9 +354,9 @@ const addresses = {
 			});
 		}
 	},
-	"stackblitz/webcontainer.html": {
+	"http://localhost:8000/": {
 		"precondition": function(page: Page) {
-			return page.frameLocator("#preview-iframe").getByText("OK").click();
+			return page.frameLocator("#preview-iframe").getByText("OK").click({ "timeout": 300_000 });
 		},
 		"onIntercept": function(filePath, data) {
 			const fileName = path.basename(filePath);
