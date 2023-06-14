@@ -111,7 +111,7 @@ const addresses = {
 				return [filePath, prune(data, {
 					"prepend": [
 						"<link href=\"https://cdn.jsdelivr.net/npm/modern-normalize/modern-normalize.min.css\" rel=\"stylesheet\" />",
-						"<base href=\"/TypeCraft/proxy/\" />"
+						"<base href=\"/vendor/codesandbox/\" />"
 					].join("")
 				})];
 			}
@@ -157,13 +157,15 @@ const addresses = {
 						"doc": "    ^-----------^",
 						"from": /\{'scope':'\/'\}/u,
 						"to": "{'scope':'.'}"
-					},
+					}
+					/*
 					{
 						"example": "var _0x2dca1e=new URL(_0x4cb68c(0x23d),location[_0x4cb68c(0x248)])[_0x4cb68c(0x209)];",
 						"doc": "                         ><",
 						"from": /(?<=new URL\()(?=_0x\w{6}\(0x\w{3}\),location\[_0x\w{6}\(0x\w{3}\)\]\)\[_0x\w{6}\(0x\w{3}\)\])/u,
 						"to": "'/TypeCraft/proxy/' + "
 					}
+					*/
 				],
 				"__csb_sw.js": [
 					{
@@ -176,7 +178,7 @@ const addresses = {
 						"example": "'/__csb'",
 						"doc": "    ^------^",
 						"from": /'\/__csb'/u,
-						"to": "'/TypeCraft/proxy/'"
+						"to": "'/vendor/codesandbox/'"
 					},
 					{
 						"example": "/__csb_runtime.8khva2zw4nsr5iciw79jxa2txw3l9vp.js",
@@ -186,6 +188,7 @@ const addresses = {
 					},
 					// These final two add an escape hatch for proxying requests outside of the nodebox.
 					// They are only needed when serving from localhost.
+					/*
 					{
 						"example": "if(_0x5c948f[_0x10fc7d(0x103)][_0x10fc7d(0xd1)](_0x10fc7d(0xd5)))",
 						"doc": "       ^-----------------------------------------------------------^",
@@ -202,6 +205,7 @@ const addresses = {
 							return url + ".pathname.startsWith('/TypeCraft/proxy/escape-hatch')||";
 						}
 					}
+					*/
 				],
 				"__csb_runtime.js": [
 					{
@@ -374,6 +378,7 @@ const addresses = {
 			});
 		}
 	},
+	*/
 	"http://localhost:8000/": {
 		"precondition": function(page: Page) {
 			return page.frameLocator("#preview-iframe").getByText("OK").click({ "timeout": 300_000 });
@@ -411,7 +416,6 @@ const addresses = {
 			});
 		}
 	}
-	*/
 };
 
 const vendorDirectory = path.join(__root, "public", "vendor");
@@ -437,12 +441,9 @@ for (let [href, { precondition, onIntercept, postcondition }] of Object.entries(
 	destroy = await intercept(href, {
 		"onIntercept": onIntercept,
 		"precondition": precondition,
+		"postcondition": postcondition,
 		"vendorDirectory": vendorDirectory
 	});
-
-	if (!(await postcondition(vendorDirectory))) {
-		throw new Error("Post condition not met for `" + href + "`!");
-	}
 }
 
 destroy();

@@ -83,7 +83,7 @@ function download({ fallbackDomain, onIntercept, vendorDirectory }: { fallbackDo
 	};
 }
 
-export async function intercept(url, { precondition, onIntercept, vendorDirectory }) {
+export async function intercept(url, { precondition, postcondition, onIntercept, vendorDirectory }) {
 	function noop() {
 		return Promise.resolve();
 	}
@@ -103,11 +103,13 @@ export async function intercept(url, { precondition, onIntercept, vendorDirector
 
 	const fallbackDomain = path.basename(new URL(".", url).pathname);
 
-	context.on("serviceworker", download({
+	const serviceWorkerListener = download({
 		"fallbackDomain": fallbackDomain,
 		"onIntercept": onIntercept,
 		"vendorDirectory": vendorDirectory
-	}));
+	});
+
+	context.on("serviceworker", serviceWorkerListener);
 
 	const page: Page = await context.newPage();
 
@@ -121,7 +123,13 @@ export async function intercept(url, { precondition, onIntercept, vendorDirector
 
 	await precondition(page);
 
+	if (postcondition !== undefined && !(await postcondition(vendorDirectory))) {
+		throw new Error("Post condition not met for `" + url + "`!");
+	}
+
 	await page.close();
+
+	context.removeListener("serviceworker", serviceWorkerListener);
 
 	return function destroy() {
 		return [

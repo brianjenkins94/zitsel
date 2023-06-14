@@ -16,13 +16,13 @@ server.use(helmet({
 	"contentSecurityPolicy": {
 		"directives": {
 			...helmet.contentSecurityPolicy.getDefaultDirectives(),
-			"default-src": ["'self'", "https://*.codesandbox.io/", "https://*.stackblitz.com/", "https://*.staticblitz.com/"],
-			"frame-src": ["'self'", "https://*.staticblitz.com/", "https://*.webcontainer.io/"],
-			"script-src": ["'self'", "https:", "'unsafe-eval'"],
-			"worker-src": ["'self'", "blob:"]
+			"default-src": ["'self'"],
+			"frame-src": ["'self'", "https://brianjenkins94.github.io/"],
+			"script-src": ["'self'", "https:", "'unsafe-eval'"]
+			// "worker-src": ["'self'", "blob:"]
 		}
-	},
-	"crossOriginEmbedderPolicy": true
+	}
+	//"crossOriginEmbedderPolicy": true
 	//"crossOriginResourcePolicy": { "policy": "same-site" }
 }));
 
@@ -109,15 +109,6 @@ async function bindRoutes(routesDirectory) {
 await bindRoutes(path.join(__root, "routes"));
 
 /*
-server.use("/staticblitz", createProxyMiddleware({
-	"pathRewrite": {
-		"^/staticblitz": ""
-	},
-	"target": "https://staticblitz.com",
-	"changeOrigin": true
-}));
-*/
-
 server.use("/t.staticblitz", createProxyMiddleware({
 	"pathRewrite": {
 		"^/t.staticblitz": ""
@@ -139,6 +130,7 @@ server.get("/.localservice@preview.shared_worker.a12d8c69.js", async function(re
 	response.type(".js");
 	response.send(await (await fetch("https://local.webcontainer.io/.localservice@preview.shared_worker.a12d8c69.js")).text());
 });
+*/
 
 server.listen(new URL(BASE_URL).port, function() {
 	console.log("> Ready on " + BASE_URL);

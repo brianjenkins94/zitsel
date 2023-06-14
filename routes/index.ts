@@ -3,7 +3,7 @@ import * as path from "path";
 import { __root } from "../config";
 
 export function get(request, response) {
-	response.sendFile(path.join(__root, "public", "webcontainer.html"));
+	response.sendFile(path.join(__root, "public", "nodebox.html"));
 }
 
 // Example route with a URL parameter and middleware:
