@@ -82,6 +82,7 @@ const addresses = {
 			// WARN: This is not perfect.
 			fileName = fileName.replace(/[-.]\w+(?=\.\w+$)/u, "");
 
+			// TODO: Find a better way to do this:
 			if (fileName === "index.html") {
 				if (indexCount === 1) {
 					fileName = "bridge.html";

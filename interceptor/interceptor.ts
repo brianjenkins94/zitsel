@@ -57,7 +57,7 @@ function download({ fallbackDomain, onIntercept, vendorDirectory }: { fallbackDo
 
 			writeFileIfChanged(...onIntercept(filePath, data));
 		} catch (error) {
-			// FIXME: Shouldn't use errors for flow control
+			// FIXME: Shouldn't use errors for flow control.
 			if (!/response.text is not a function|is unavailable|no resource with given identifier/ui.test(error.message)) {
 				throw error;
 			}
