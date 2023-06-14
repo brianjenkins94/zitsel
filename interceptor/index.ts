@@ -247,7 +247,8 @@ const addresses = {
 			});
 		}
 	},
-	"https://webcontainer.new/": {
+	/*
+	"https://stackblitz.com/edit/stackblitz-webcontainer-api-starter-1dztjd": {
 		"precondition": function(page: Page) {
 			return page.frameLocator("iframe[title='Preview page']").frameLocator("#app iframe").getByText("Welcome to a WebContainers app! 🥳").click();
 		},
@@ -323,7 +324,14 @@ const addresses = {
 						"to": "'require-corp'"
 					},
 				],
-				"webcontainer.a12d8c69.js": [],
+				"webcontainer.a12d8c69.js": [
+					{
+						"example": "_0x3f0493=[new URL('/bin_index.a12d8c69',_0x122f9f)['href'],...null!=_0x467f25?_0x467f25:[]];",
+						"doc": "               ^------------------------------------------------------------------------------^",
+						"from": /(?<=_0x\w{6}=\[)new URL\(.*?(?=\];)/u,
+						"to": "location.origin + '/vendor/stackblitz/bin_index.a12d8c69'"
+					}
+				],
 				"bin_index.a12d8c69": []
 			};
 
@@ -391,6 +399,7 @@ const addresses = {
 			});
 		}
 	}
+	*/
 };
 
 const vendorDirectory = path.join(__root, "public", "vendor");

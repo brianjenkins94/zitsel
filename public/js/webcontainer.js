@@ -6,15 +6,27 @@ const previewIframe = document.getElementById("preview-iframe");
 
 const webContainer = await WebContainer.boot();
 
-const files = await (await fetch("/api/files")).json();
+function getOrCreateKeyOfObjectByPath(object, path) {
+	return path.reduce(function(object, key) {
+		if (object[key] === undefined) {
+			object[key] = {};
+		}
 
-for (const file of files) {
-	files[file] = {
-		"contents": files[file]
+		return object[key];
+	}, object) || object;
+}
+
+const files = {};
+
+for (const [filePath, contents] of Object.entries(await (await fetch("/api/files")).json())) {
+	getOrCreateKeyOfObjectByPath(files, filePath.split("/").reduce(function(previous, current) {
+		return [...previous, "directory", current];
+	}, []))["file"] = {
+		"contents": contents
 	};
 }
 
-await webContainer.mount(files);
+await webContainer.mount(files["directory"]);
 
 const installProcess = await webContainer.spawn("npm", ["install"]);
 

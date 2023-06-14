@@ -16,6 +16,7 @@ server.use(helmet({
 		"directives": {
 			...helmet.contentSecurityPolicy.getDefaultDirectives(),
 			"default-src": ["'self'", "https://*.codesandbox.io/", "https://*.stackblitz.com/", "https://*.staticblitz.com/"],
+			"frame-src": ["'self'", "https://*.staticblitz.com/", "https://*.webcontainer.io/"],
 			"script-src": ["'self'", "https:", "'unsafe-eval'"],
 			"worker-src": ["'self'", "blob:"]
 		}
