@@ -108,10 +108,12 @@ async function bindRoutes(routesDirectory) {
 
 await bindRoutes(path.join(__root, "routes"));
 
-// Doesn't start with `/api/` or `/zitsel/`, doesn't end with `__csb_sw.js`.
-server.get(/^(?!\/(?:api|zitesel)\/).+?(?<!__csb_sw\.js)$/u, function(request, response) {
-	response.redirect("/zitesel" + request.url);
-});
+server.get("/zitsel/*", createProxyMiddleware({
+	"pathRewrite": {
+		"^/zitsel": ""
+	},
+	"target": "http://localhost:8000"
+}));
 
 /*
 server.use("/t.staticblitz", createProxyMiddleware({

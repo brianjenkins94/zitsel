@@ -110,8 +110,8 @@ const addresses = {
 			if (fileName.endsWith(".html")) {
 				return [filePath, prune(data, {
 					"prepend": [
-						"<link href=\"https://cdn.jsdelivr.net/npm/modern-normalize/modern-normalize.min.css\" rel=\"stylesheet\" />",
-						"<base href=\"/vendor/codesandbox/\" />"
+						"<link href=\"https://cdn.jsdelivr.net/npm/modern-normalize/modern-normalize.min.css\" rel=\"stylesheet\" />"
+						//"<base href=\"/vendor/codesandbox/\" />"
 					].join("")
 				})];
 			}

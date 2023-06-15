@@ -1,7 +1,7 @@
 import { __root } from "../config";
 
 export function get(request, response) {
-	response.redirect("/zitsel");
+	response.redirect("/zitsel/");
 }
 
 // Example route with a URL parameter and middleware:
