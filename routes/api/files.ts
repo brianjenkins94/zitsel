@@ -1,5 +1,5 @@
 import { spawnSync } from "child_process";
-import { promises as fs } from "fs";
+import { existsSync, promises as fs } from "fs";
 import path from "path";
 
 export async function get(request, response) {
@@ -7,7 +7,7 @@ export async function get(request, response) {
 		"encoding": "utf8",
 		"shell": process.platform === "win32" ? path.join(process.env["ProgramW6432"], "Git", "usr", "bin", "bash.exe") : true
 	}).stdout.trim().split("\n").filter(function(filePath) {
-		return !filePath.startsWith(".");
+		return !filePath.startsWith(".") && existsSync(filePath);
 	}).map(async function(fileName) {
 		return [fileName, await fs.readFile(fileName, { "encoding": "utf8" })];
 	})));
