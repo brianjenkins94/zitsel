@@ -12,7 +12,7 @@ const nodebox = new Nodebox({
 
 await nodebox.connect();
 
-await nodebox.fs.init(await (await fetch("/api/files")).json());
+await nodebox.fs.init(await (await fetch(BASE_URL + "api/files")).json());
 
 const shell = nodebox.shell.create();
 

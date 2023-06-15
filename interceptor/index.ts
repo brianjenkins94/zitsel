@@ -401,15 +401,31 @@ const addresses = {
 		"onIntercept": function(filePath, data) {
 			const fileName = path.basename(filePath);
 
-			return [];
+			if (fileName === "files") {
+				filePath = path.join(filePath, "api", "files", "index.json");
+			}
+
+			const allowlist = {
+				"files": []
+			}
+
+			if (allowlist[fileName] === undefined) {
+				return [];
+			}
+
+			for (const substitution of allowlist[fileName]) {
+				data = replace(data, substitution);
+			}
+
+			return [filePath, data];
 		},
 		"postcondition": function(vendorDirectory) {
 			const files = [
-
+				"index.json"
 			];
 
 			const results = files.map(function(fileName) {
-				return existsSync(path.join(vendorDirectory, "stackblitz", fileName));
+				return existsSync(path.join(vendorDirectory, fileName));
 			});
 
 			return results.every(function(exists) {
