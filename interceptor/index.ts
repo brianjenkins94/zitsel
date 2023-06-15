@@ -128,7 +128,7 @@ const addresses = {
 						"example": "_0x248c43=this[_0x83edf3(0x3e2)](_0x537ed8,_0x70bb64+_0x83edf3(0x559),'bridge');",
 						"doc": "                                               ^------------------------^",
 						"from": /(?<=\(_0x\w{6},\s*)_0x\w{6}\s*\+\s*_0x\w{6}\(0x\w{3}\)(?=,\s*'bridge'\))/u,
-						"to": "'/vendor/codesandbox/index.html'"
+						"to": "'index.html'"
 					},
 					{
 						"example": "'sourceShellId':_0x362a85(this[_0x11a7cb(0x658)][_0x11a7cb(0x60b)](_0x34f176[_0x11a7cb(0x3c2)]),",
@@ -152,17 +152,26 @@ const addresses = {
 						"from": /\/?__csb_sw(\.\w+)\.js/gu,
 						"to": "__csb_sw.js"
 					},
+					// Leaving this here in case we decide we need to move the service worker again.
+					/*
 					{
 						"example": "(_0x100c1b(0x193),{'scope':'/'}",
 						"doc": "    ^-----------^",
 						"from": /\(_0x\w{6}\(0x\w{3}\),\{'scope':'\/'\}/u,
-						"to": "('../../__csb_sw.js',{'scope':'.'}"
+						"to": "('../../__csb_sw.js',{'scope':'../../'}"
+					},
+					*/
+					{
+						"example": "{'scope':'/'}",
+						"doc": "    ^-----------^",
+						"from": /\{'scope':'\/'\}/u,
+						"to": "{'scope':'.'}"
 					},
 					{
 						"example": "var _0x2dca1e=new URL(_0x4cb68c(0x23d),location[_0x4cb68c(0x248)])[_0x4cb68c(0x209)];",
-						"doc": "                         ><",
-						"from": /(?<=new URL\()(?=_0x\w{6}\(0x\w{3}\),location\[_0x\w{6}\(0x\w{3}\)\]\)\[_0x\w{6}\(0x\w{3}\)\])/u,
-						"to": "'/vendor/codesandbox/' + "
+						"doc": "                  ^--------------------------------------------------------------------^",
+						"from": /new URL\(_0x\w{6}\(0x\w{3}\),location\[_0x\w{6}\(0x\w{3}\)\]\)\[_0x\w{6}\(0x\w{3}\)\]/u,
+						"to": "location.href.replace('index.html','__csb_sw.js')"
 					}
 				],
 				"__csb_sw.js": [
@@ -176,7 +185,7 @@ const addresses = {
 						"example": "'/__csb'",
 						"doc": "    ^------^",
 						"from": /'\/__csb'/u,
-						"to": "'/vendor/codesandbox/'"
+						"to": "'vendor/codesandbox/'"
 					},
 					{
 						"example": "/__csb_runtime.8khva2zw4nsr5iciw79jxa2txw3l9vp.js",
@@ -225,10 +234,13 @@ const addresses = {
 				data = replace(data, substitution);
 			}
 
+			// Leaving this here in case we decide we need to move the service worker again.
+			/*
 			// Service Worker scope is dictated by its path.
 			if (fileName === "__csb_sw.js") {
 				filePath = path.join(path.dirname(filePath), "..", "..", fileName);
 			}
+			*/
 
 			return [filePath, data];
 		},
@@ -236,7 +248,7 @@ const addresses = {
 			const files = [
 				"__csb_bridge.js",
 				"__csb_runtime.js",
-				"../../__csb_sw.js",
+				"__csb_sw.js",
 				"bridge.html",
 				"brotli_wasm_bg.wasm",
 				"index.html",
