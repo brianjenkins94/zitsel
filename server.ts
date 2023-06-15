@@ -108,6 +108,11 @@ async function bindRoutes(routesDirectory) {
 
 await bindRoutes(path.join(__root, "routes"));
 
+// Doesn't start with `/api/` or `/zitsel/`, doesn't end with `__csb_sw.js`.
+server.get(/^(?!\/(?:api|zitesel)\/).+?(?<!__csb_sw\.js)$/u, function(request, response) {
+	response.redirect("/zitesel" + request.url);
+});
+
 /*
 server.use("/t.staticblitz", createProxyMiddleware({
 	"pathRewrite": {
@@ -131,19 +136,6 @@ server.get("/.localservice@preview.shared_worker.a12d8c69.js", async function(re
 	response.send(await (await fetch("https://local.webcontainer.io/.localservice@preview.shared_worker.a12d8c69.js")).text());
 });
 */
-
-server.get("/__csb_sw.js", function(request, response) {
-	response.status(200).sendFile(path.join(__root, "public", "vendor", "codesandbox", "__csb_sw.js"));
-});
-
-const isCI = Boolean(process.env["CI"]);
-
-if (isCI) {
-	server.get("/vendor/codesandbox/main.js", function(request, response) {
-		response.type("text/javascript");
-		response.status(200).send("document.body.append(\"OK\");");
-	});
-}
 
 server.listen(new URL(BASE_URL).port, function() {
 	console.log("> Ready on " + BASE_URL);

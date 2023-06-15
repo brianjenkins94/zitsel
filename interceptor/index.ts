@@ -56,7 +56,7 @@ function prune(data, options = {}) {
 			const src = $(element).attr("src");
 
 			if (element.tagName === "script" && src !== undefined) {
-				if (src.startsWith("https://cdn.jsdelivr.net/")) {
+				if (src.startsWith("https://cdn.jsdelivr.net/") || src.startsWith(".")) {
 					continue;
 				} else if (!/cdn-cgi|cloudflare/u.test(src)) {
 					$(element).attr("src", path.basename(src).split("?")[0].replace(/[-.]\w+\./gu, "."));
@@ -148,18 +148,16 @@ const addresses = {
 					},
 					{
 						"example": "/__csb_sw.n8h9n5kw9fbcw1sti2w7dwmh20n21mt.js",
-						"doc": "    ^------------------------------------------^",
+						"doc": "    ^--------------------------------------------^",
 						"from": /\/?__csb_sw(\.\w+)\.js/gu,
-						"to": "/__csb_sw.js" // Not sure about this leading slash
+						"to": "__csb_sw.js"
 					},
-					/*
 					{
-						"example": "{'scope':'/'}",
+						"example": "(_0x100c1b(0x193),{'scope':'/'}",
 						"doc": "    ^-----------^",
-						"from": /\{'scope':'\/'\}/u,
-						"to": "{'scope':'.'}"
+						"from": /\(_0x\w{6}\(0x\w{3}\),\{'scope':'\/'\}/u,
+						"to": "('../../__csb_sw.js',{'scope':'.'}"
 					},
-					*/
 					{
 						"example": "var _0x2dca1e=new URL(_0x4cb68c(0x23d),location[_0x4cb68c(0x248)])[_0x4cb68c(0x209)];",
 						"doc": "                         ><",
@@ -227,13 +225,18 @@ const addresses = {
 				data = replace(data, substitution);
 			}
 
+			// Service Worker scope is dictated by its path.
+			if (fileName === "__csb_sw.js") {
+				filePath = path.join(path.dirname(filePath), "..", "..", fileName);
+			}
+
 			return [filePath, data];
 		},
 		"postcondition": function(vendorDirectory) {
 			const files = [
 				"__csb_bridge.js",
 				"__csb_runtime.js",
-				"__csb_sw.js",
+				"../../__csb_sw.js",
 				"bridge.html",
 				"brotli_wasm_bg.wasm",
 				"index.html",

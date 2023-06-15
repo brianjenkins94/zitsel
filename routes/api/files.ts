@@ -2,6 +2,8 @@ import { spawnSync } from "child_process";
 import { existsSync, promises as fs } from "fs";
 import path from "path";
 
+import { __root, isCI } from "../../config";
+
 export async function get(request, response) {
 	const files = Object.fromEntries(await Promise.all(spawnSync("git", ["ls-files"], {
 		"encoding": "utf8",
@@ -66,6 +68,7 @@ export async function get(request, response) {
 			server.listen(new URL(BASE_URL).port, function() {
 				console.log("> Ready on " + BASE_URL);
 			});
-		`
+		`,
+		"public/js/main.js": isCI ? "document.write(\"OK\");" : await fs.readFile(path.join(__root, "public", "js", "main.js"))
 	});
 }

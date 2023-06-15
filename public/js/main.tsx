@@ -1,6 +1,8 @@
 import Overlay from "@components/overlay";
 
-document.body.prepend(Overlay());
+document.addEventListener("DOMContentLoaded", function(event) {
+	document.body.prepend(Overlay());
+});
 
 /*
 let sandbox;
