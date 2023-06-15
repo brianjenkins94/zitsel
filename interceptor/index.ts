@@ -402,7 +402,7 @@ const addresses = {
 			const fileName = path.basename(filePath);
 
 			if (fileName === "files") {
-				filePath = path.join(filePath, "api", "files", "index.json");
+				filePath = path.join(path.dirname(filePath), "..", "api", "files", "index.json");
 			}
 
 			const allowlist = {
