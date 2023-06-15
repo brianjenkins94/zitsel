@@ -136,6 +136,15 @@ server.get("/__csb_sw.js", function(request, response) {
 	response.status(200).sendFile(path.join(__root, "public", "vendor", "codesandbox", "__csb_sw.js"));
 });
 
+const isCI = Boolean(process.env["CI"]);
+
+if (isCI) {
+	server.get("/vendor/codesandbox/main.js", function(request, response) {
+		response.type(".js");
+		response.status(200).send("document.body.append(\"OK\");");
+	});
+}
+
 server.listen(new URL(BASE_URL).port, function() {
 	console.log("> Ready on " + BASE_URL);
 });
