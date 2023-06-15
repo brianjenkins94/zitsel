@@ -128,7 +128,7 @@ const addresses = {
 						"example": "_0x248c43=this[_0x83edf3(0x3e2)](_0x537ed8,_0x70bb64+_0x83edf3(0x559),'bridge');",
 						"doc": "                                               ^------------------------^",
 						"from": /(?<=\(_0x\w{6},\s*)_0x\w{6}\s*\+\s*_0x\w{6}\(0x\w{3}\)(?=,\s*'bridge'\))/u,
-						"to": "'/TypeCraft/proxy/index.html'"
+						"to": "'/vendor/codesandbox/bridge.html'"
 					},
 					{
 						"example": "'sourceShellId':_0x362a85(this[_0x11a7cb(0x658)][_0x11a7cb(0x60b)](_0x34f176[_0x11a7cb(0x3c2)]),",
@@ -150,22 +150,22 @@ const addresses = {
 						"example": "/__csb_sw.n8h9n5kw9fbcw1sti2w7dwmh20n21mt.js",
 						"doc": "    ^------------------------------------------^",
 						"from": /\/?__csb_sw(\.\w+)\.js/gu,
-						"to": "__csb_sw.js"
+						"to": "/__csb_sw.js" // Not sure about this leading slash
 					},
+					/*
 					{
 						"example": "{'scope':'/'}",
 						"doc": "    ^-----------^",
 						"from": /\{'scope':'\/'\}/u,
 						"to": "{'scope':'.'}"
-					}
-					/*
+					},
+					*/
 					{
 						"example": "var _0x2dca1e=new URL(_0x4cb68c(0x23d),location[_0x4cb68c(0x248)])[_0x4cb68c(0x209)];",
 						"doc": "                         ><",
 						"from": /(?<=new URL\()(?=_0x\w{6}\(0x\w{3}\),location\[_0x\w{6}\(0x\w{3}\)\]\)\[_0x\w{6}\(0x\w{3}\)\])/u,
-						"to": "'/TypeCraft/proxy/' + "
+						"to": "'/vendor/codesandbox/' + "
 					}
-					*/
 				],
 				"__csb_sw.js": [
 					{
@@ -185,7 +185,7 @@ const addresses = {
 						"doc": "    ^-----------------------------------------------^",
 						"from": /\/__csb_runtime(\.\w+)?\.js/u,
 						"to": "__csb_runtime.js"
-					},
+					}
 					// These final two add an escape hatch for proxying requests outside of the nodebox.
 					// They are only needed when serving from localhost.
 					/*
@@ -387,7 +387,7 @@ const addresses = {
 			const fileName = path.basename(filePath);
 
 			if (fileName.endsWith(".html")) {
-				return [filePath, prune(data)];
+				return [filePath, data];
 			}
 
 			const allowlist = {};
@@ -444,6 +444,8 @@ for (let [href, { precondition, onIntercept, postcondition }] of Object.entries(
 		"postcondition": postcondition,
 		"vendorDirectory": vendorDirectory
 	});
+
+	console.log("\n---\n");
 }
 
 destroy();

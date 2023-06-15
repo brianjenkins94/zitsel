@@ -16,10 +16,10 @@ server.use(helmet({
 	"contentSecurityPolicy": {
 		"directives": {
 			...helmet.contentSecurityPolicy.getDefaultDirectives(),
-			"default-src": ["'self'"],
-			"frame-src": ["'self'", "https://brianjenkins94.github.io/"],
+			"default-src": ["'self'", "https://*.codesandbox.io"],
+			"frame-src": ["'self'"],
 			"script-src": ["'self'", "https:", "'unsafe-eval'"]
-			// "worker-src": ["'self'", "blob:"]
+			//"worker-src": ["'self'", "blob:"]
 		}
 	}
 	//"crossOriginEmbedderPolicy": true
@@ -131,6 +131,10 @@ server.get("/.localservice@preview.shared_worker.a12d8c69.js", async function(re
 	response.send(await (await fetch("https://local.webcontainer.io/.localservice@preview.shared_worker.a12d8c69.js")).text());
 });
 */
+
+server.get("/__csb_sw.js", function(request, response) {
+	response.status(200).sendFile(path.join(__root, "public", "vendor", "codesandbox", "__csb_sw.js"));
+});
 
 server.listen(new URL(BASE_URL).port, function() {
 	console.log("> Ready on " + BASE_URL);
