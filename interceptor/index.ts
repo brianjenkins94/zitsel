@@ -96,7 +96,7 @@ const addresses = {
 
 			// TODO: Find a better way to do this:
 			if (fileName === "index.html") {
-				if (indexCount === 1) {
+				if (indexCount === 0) {
 					fileName = "bridge.html";
 				} else if (indexCount === 2) {
 					fileName = "preview.html";
@@ -128,7 +128,7 @@ const addresses = {
 						"example": "_0x248c43=this[_0x83edf3(0x3e2)](_0x537ed8,_0x70bb64+_0x83edf3(0x559),'bridge');",
 						"doc": "                                               ^------------------------^",
 						"from": /(?<=\(_0x\w{6},\s*)_0x\w{6}\s*\+\s*_0x\w{6}\(0x\w{3}\)(?=,\s*'bridge'\))/u,
-						"to": "'/vendor/codesandbox/bridge.html'"
+						"to": "'/vendor/codesandbox/index.html'"
 					},
 					{
 						"example": "'sourceShellId':_0x362a85(this[_0x11a7cb(0x658)][_0x11a7cb(0x60b)](_0x34f176[_0x11a7cb(0x3c2)]),",

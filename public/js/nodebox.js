@@ -5,7 +5,7 @@ const previewIframe = document.getElementById("preview-iframe");
 
 const nodebox = new Nodebox({
 	"iframe": nodeboxIframe,
-	"runtimeUrl": "/vendor/codesandbox/index.html"
+	"runtimeUrl": "/vendor/codesandbox/bridge.html"
 });
 
 await nodebox.connect();
