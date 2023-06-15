@@ -31,6 +31,7 @@
 			"steps": [
 				{ "uses": "actions/checkout@v3", "with": { "ref": "main" } },
 				{ "uses": "actions/setup-node@v3", "with": { "node-version": 20 } },
+				{ "run": "npm config set script-shell bash" },
 				{ "uses": "bahmutov/npm-install@v1", "with": { "useLockFile": false } },
 				{ "run": "xvfb-run npx turbo run ${{ matrix.script }}" },
 				{
