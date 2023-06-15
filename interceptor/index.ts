@@ -386,21 +386,7 @@ const addresses = {
 		"onIntercept": function(filePath, data) {
 			const fileName = path.basename(filePath);
 
-			if (fileName.endsWith(".html")) {
-				return [filePath, data];
-			}
-
-			const allowlist = {};
-
-			if (allowlist[fileName] === undefined) {
-				return [];
-			}
-
-			for (const substitution of allowlist[fileName]) {
-				data = replace(data, substitution);
-			}
-
-			return [filePath, data];
+			return [];
 		},
 		"postcondition": function(vendorDirectory) {
 			const files = [

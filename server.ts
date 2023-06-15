@@ -127,7 +127,7 @@ server.use("/w-corp.staticblitz", createProxyMiddleware({
 
 server.get("/.localservice@preview.shared_worker.a12d8c69.js", async function(request, response) {
 	//response.setHeader("Content-Type", "text/javascript");
-	response.type(".js");
+	response.type("text/javascript");
 	response.send(await (await fetch("https://local.webcontainer.io/.localservice@preview.shared_worker.a12d8c69.js")).text());
 });
 */
@@ -140,7 +140,7 @@ const isCI = Boolean(process.env["CI"]);
 
 if (isCI) {
 	server.get("/vendor/codesandbox/main.js", function(request, response) {
-		response.type(".js");
+		response.type("text/javascript");
 		response.status(200).send("document.body.append(\"OK\");");
 	});
 }
