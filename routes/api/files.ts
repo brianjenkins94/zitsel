@@ -55,9 +55,9 @@ export async function get(request, response) {
 			});
 
 			server.get("/js/main.js", async function(request, response) {
-				// Despite setting this header, the browser console shows the error:
+				// Despite setting the type, the browser console shows the error:
 				// > Failed to load module script: Expected a JavaScript module script but the server responded with a MIME type of "application/octet-stream". Strict MIME type checking is enforced for module scripts per HTML spec.
-				response.setHeader("Content-Type", "text/javascript");
+				response.type("text/javascript");
 
 				// response.sendFile() would not work.
 				response.send(await fs.readFile("public/js/main.js"));
