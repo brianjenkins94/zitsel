@@ -56,7 +56,7 @@ function prune(data, options = {}) {
 			const src = $(element).attr("src");
 
 			if (element.tagName === "script" && src !== undefined) {
-				if (src.startsWith("https://cdn.jsdelivr.net/") || src.startsWith(".")) {
+				if (src.startsWith("https://cdn.jsdelivr.net/")) {
 					continue;
 				} else if (!/cdn-cgi|cloudflare/u.test(src)) {
 					$(element).attr("src", path.basename(src).split("?")[0].replace(/[-.]\w+\./gu, "."));
@@ -108,12 +108,12 @@ const addresses = {
 			filePath = path.join(path.dirname(filePath), fileName);
 
 			if (fileName.endsWith(".html")) {
-				return [filePath, prune(data, {
+				data = prune(data, {
 					"prepend": [
 						"<link href=\"https://cdn.jsdelivr.net/npm/modern-normalize/modern-normalize.min.css\" rel=\"stylesheet\" />"
 						//"<base href=\"/vendor/codesandbox/\" />"
 					].join("")
-				})];
+				});
 			}
 
 			const allowlist = {
@@ -223,7 +223,15 @@ const addresses = {
 					}
 				],
 				"brotli_wasm_bg.wasm": [],
-				"worker.js": []
+				"worker.js": [],
+				"preview.html": [
+					{
+						"example": "<script src=\"main.js\"",
+						"doc": "                 ^------^",
+						"from": /"main\.js/u,
+						"to": "\"/js/main.js"
+					}
+				]
 			};
 
 			if (allowlist[fileName] === undefined) {

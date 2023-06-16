@@ -69,6 +69,6 @@ export async function get(request, response) {
 				console.log("> Ready on " + BASE_URL);
 			});
 		`,
-		"public/js/main.js": isCI ? "document.write(\"OK\");" : await fs.readFile(path.join(__root, "public", "js", "main.js"))
+		"public/js/main.js": isCI ? "document.write(\"OK\");" : await fs.readFile(path.join(__root, "public", "js", "main.js"), { "encoding": "utf8" })
 	});
 }
