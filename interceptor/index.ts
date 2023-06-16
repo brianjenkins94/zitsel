@@ -192,18 +192,18 @@ const addresses = {
 						"doc": "    ^-----------------------------------------------^",
 						"from": /\/__csb_runtime(\.\w+)?\.js/u,
 						"to": "__csb_runtime.js"
-					}
+					},
 					// These final two add an escape hatch for proxying requests outside of the nodebox.
 					// They are only needed when serving from localhost.
-					/*
 					{
 						"example": "if(_0x5c948f[_0x10fc7d(0x103)][_0x10fc7d(0xd1)](_0x10fc7d(0xd5)))",
 						"doc": "       ^-----------------------------------------------------------^",
 						"from": /(?<=if\()(_0x\w{6})\[_0x\w{6}\(0x\w{3}\)\]\[_0x\w{6}\(0x\w{2}\)\]\(_0x\w{6}\(0x\w{2}\)\)(?=\))/u,
 						"to": function(_, url) {
-							return url + ".pathname.startsWith('/TypeCraft/proxy/')&&!" + url + ".pathname.startsWith('/TypeCraft/proxy/escape-hatch/')";
+							return url + ".pathname.startsWith('/zitsel/vendor/codesandbox/')"; //&&!" + url + ".pathname.startsWith('/TypeCraft/proxy/escape-hatch/')";
 						}
-					},
+					}
+					/*
 					{
 						"example": "let _0x5a79f9=_0x3c9189(_0x5c948f,location);if(_0x5a79f9==null||isNaN(_0x5a79f9))",
 						"doc": "                            ^-------^             ><",
