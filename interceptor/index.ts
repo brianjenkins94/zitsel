@@ -224,6 +224,8 @@ const addresses = {
 				],
 				"brotli_wasm_bg.wasm": [],
 				"worker.js": [],
+				"bridge.html": [],
+				"index.html": [],
 				"preview.html": [
 					{
 						"example": "<script src=\"main.js\"",
