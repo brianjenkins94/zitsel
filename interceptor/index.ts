@@ -171,7 +171,7 @@ const addresses = {
 						"example": "var _0x2dca1e=new URL(_0x4cb68c(0x23d),location[_0x4cb68c(0x248)])[_0x4cb68c(0x209)];",
 						"doc": "                  ^--------------------------------------------------------------------^",
 						"from": /new URL\(_0x\w{6}\(0x\w{3}\),location\[_0x\w{6}\(0x\w{3}\)\]\)\[_0x\w{6}\(0x\w{3}\)\]/u,
-						"to": "location.href.replace('index.html','__csb_sw.js')"
+						"to": "location.href.replace(/index\\.html$/u,'__csb_sw.js')"
 					}
 				],
 				"__csb_sw.js": [
@@ -193,14 +193,13 @@ const addresses = {
 						"from": /\/__csb_runtime(\.\w+)?\.js/u,
 						"to": "__csb_runtime.js"
 					},
-					// These final two add an escape hatch for proxying requests outside of the nodebox.
-					// They are only needed when serving from localhost.
+					// These last two add an escape hatch for proxying requests outside of the nodebox.
 					{
 						"example": "if(_0x5c948f[_0x10fc7d(0x103)][_0x10fc7d(0xd1)](_0x10fc7d(0xd5)))",
 						"doc": "       ^-----------------------------------------------------------^",
 						"from": /(?<=if\()(_0x\w{6})\[_0x\w{6}\(0x\w{3}\)\]\[_0x\w{6}\(0x\w{2}\)\]\(_0x\w{6}\(0x\w{2}\)\)(?=\))/u,
 						"to": function(_, url) {
-							return url + ".pathname.startsWith('/zitsel/vendor/codesandbox/')"; //&&!" + url + ".pathname.startsWith('/TypeCraft/proxy/escape-hatch/')";
+							return "/\\/vendor\\/codesandbox\\/(?!escape-hatch\\/)/u.test(" + url + ")";
 						}
 					}
 					/*
@@ -431,7 +430,7 @@ const addresses = {
 		},
 		"postcondition": function(vendorDirectory) {
 			const files = [
-				"index.json"
+				"../api/files/index.json"
 			];
 
 			const results = files.map(function(fileName) {
