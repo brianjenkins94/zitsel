@@ -152,15 +152,6 @@ const addresses = {
 						"from": /\/?__csb_sw(\.\w+)\.js/gu,
 						"to": "__csb_sw.js"
 					},
-					// Leaving this here in case we decide we need to move the service worker again.
-					/*
-					{
-						"example": "(_0x100c1b(0x193),{'scope':'/'}",
-						"doc": "    ^-----------^",
-						"from": /\(_0x\w{6}\(0x\w{3}\),\{'scope':'\/'\}/u,
-						"to": "('../../__csb_sw.js',{'scope':'../../'}"
-					},
-					*/
 					{
 						"example": "{'scope':'/'}",
 						"doc": "    ^-----------^",
@@ -242,14 +233,6 @@ const addresses = {
 			for (const substitution of allowlist[fileName]) {
 				data = replace(data, substitution);
 			}
-
-			// Leaving this here in case we decide we need to move the service worker again.
-			/*
-			// Service Worker scope is dictated by its path.
-			if (fileName === "__csb_sw.js") {
-				filePath = path.join(path.dirname(filePath), "..", "..", fileName);
-			}
-			*/
 
 			return [filePath, data];
 		},

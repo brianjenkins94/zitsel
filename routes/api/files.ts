@@ -45,7 +45,6 @@ export async function get(request, response) {
 							<html lang="en">
 								<head>
 									<link href="https://cdn.jsdelivr.net/npm/modern-normalize/modern-normalize.min.css" rel="stylesheet">
-									<script src="/sw.js" type="module"></script>
 									<script src="/js/main.js" type="module"></script>
 								</head>
 								<body></body>
@@ -73,7 +72,6 @@ export async function get(request, response) {
 							<html lang="en">
 								<head>
 									<link href="https://cdn.jsdelivr.net/npm/modern-normalize/modern-normalize.min.css" rel="stylesheet">
-									<script src="/sw.js" type="module"></script>
 									<script src="/js/main.js" type="module"></script>
 								</head>
 								<body></body>
