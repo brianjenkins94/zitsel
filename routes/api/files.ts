@@ -60,35 +60,6 @@ export async function get(request, response) {
 						},
 						"body": await fs.readFile("public/js/main.js")
 					};
-				},
-				[BASE_PATH + "/preview.html"]: function(request, response) {
-					return {
-						"statusCode": 200,
-						"headers": {
-							"Content-Type": "text/html"
-						},
-						"body": \`
-							<!DOCTYPE html>
-							<html lang="en">
-								<head>
-									<link href="https://cdn.jsdelivr.net/npm/modern-normalize/modern-normalize.min.css" rel="stylesheet">
-									<script src="/js/main.js" type="module"></script>
-								</head>
-								<body></body>
-							</html>
-						\`.trim()
-					};
-				},
-				[BASE_PATH + "/sw.js"]: function(request, response) {
-					return {
-						"statusCode": 200,
-						"headers": {
-							"Content-Type": "text/javascript"
-						},
-						"body": \`
-							importScripts("https://brianjenkins94.github.io/zitsel/vendor/codesandbox/__csb_sw.js");
-						\`.trim()
-					};
 				}
 			};
 
