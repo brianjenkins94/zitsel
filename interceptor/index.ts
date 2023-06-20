@@ -405,7 +405,8 @@ const addresses = {
 	*/
 	"http://localhost:8000/": {
 		"precondition": function(page: Page) {
-			return page.frameLocator("#preview-iframe").getByText("OK").click({ "timeout": 300_000 });
+			// WARN: This is testing more than the minimum.
+			return page.frameLocator("#preview-iframe").locator("body > *").first.click({ "timeout": 300_000 });
 		},
 		"onIntercept": function(filePath, data) {
 			const fileName = path.basename(filePath);
@@ -416,7 +417,7 @@ const addresses = {
 
 			const allowlist = {
 				"files": []
-			}
+			};
 
 			if (allowlist[fileName] === undefined) {
 				return [];

@@ -1,7 +1,7 @@
 import Overlay from "@components/overlay";
 
 document.addEventListener("DOMContentLoaded", function(event) {
-	document.body.prepend(Overlay());
+	document.body.insertAdjacentHTML("afterbegin", Overlay());
 });
 
 /*
