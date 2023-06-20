@@ -406,7 +406,7 @@ const addresses = {
 	"http://localhost:8000/": {
 		"precondition": function(page: Page) {
 			// WARN: This is testing more than the minimum.
-			return page.frameLocator("#preview-iframe").locator("body > *").first.click({ "timeout": 300_000 });
+			return page.frameLocator("#preview-iframe").locator("body > *").first().click({ "timeout": 300_000 });
 		},
 		"onIntercept": function(filePath, data) {
 			const fileName = path.basename(filePath);
