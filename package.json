@@ -6,8 +6,8 @@
   "author": "Brian Jenkins",
   "license": "MIT",
   "scripts": {
-    "build": "tsup public/js/main.tsx --format esm --treeshake --outDir public/js/",
-    "prebuild": "CODE=0 ; (node --experimental-specifier-resolution=node --loader=ts-node/esm server.ts & { node --experimental-specifier-resolution=node --loader=ts-node/esm interceptor ; CODE=$? ; kill -INT $(jobs -p) ; }) ; (exit $CODE)",
+    "build": "CODE=0 ; (node --experimental-specifier-resolution=node --loader=ts-node/esm server.ts & { node --experimental-specifier-resolution=node --loader=ts-node/esm interceptor ; CODE=$? ; kill -INT $(jobs -p) ; }) ; (exit $CODE)",
+    "prebuild": "tsup public/js/main.tsx --format esm --treeshake --outDir public/js/",
     "start": "nodemon --ext ts,tsx --ignore dist --exec \"node --experimental-specifier-resolution=node --loader=ts-node/esm server.ts\"",
     "test": "echo \"Error: no test specified\"",
     "tree": "node --experimental-specifier-resolution=node --loader=ts-node/esm util/tree.ts"
