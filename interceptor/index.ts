@@ -148,7 +148,7 @@ const addresses = {
 					},
 					{
 						"example": "/__csb_sw.n8h9n5kw9fbcw1sti2w7dwmh20n21mt.js",
-						"doc": "    ^--------------------------------------------^",
+						"doc": "    ^------------------------------------------^",
 						"from": /\/?__csb_sw(\.\w+)\.js/gu,
 						"to": "__csb_sw.js"
 					},
@@ -157,12 +157,6 @@ const addresses = {
 						"doc": "    ^-----------^",
 						"from": /\{'scope':'\/'\}/u,
 						"to": "{'scope':'.'}"
-					},
-					{
-						"example": "var _0x2dca1e=new URL(_0x4cb68c(0x23d),location[_0x4cb68c(0x248)])[_0x4cb68c(0x209)];",
-						"doc": "                  ^--------------------------------------------------------------------^",
-						"from": /new URL\(_0x\w{6}\(0x\w{3}\),location\[_0x\w{6}\(0x\w{3}\)\]\)\[_0x\w{6}\(0x\w{3}\)\]/u,
-						"to": "location.href.replace(/index\\.html$/u,'__csb_sw.js')"
 					}
 				],
 				"__csb_sw.js": [
@@ -171,12 +165,6 @@ const addresses = {
 						"doc": "                  ^-------------------------------------------------------^",
 						"from": /\+_0x\w{6}\['split'\]\('\.'\)\[0x0\]\[_0x68d8a2\(0x122\)\]\('-'\)\[0x1\]/u,
 						"to": "8000"
-					},
-					{
-						"example": "'/__csb'",
-						"doc": "    ^------^",
-						"from": /'\/__csb'/u,
-						"to": "'vendor/codesandbox/'"
 					},
 					{
 						"example": "/__csb_runtime.8khva2zw4nsr5iciw79jxa2txw3l9vp.js",
@@ -190,7 +178,7 @@ const addresses = {
 						"doc": "       ^-----------------------------------------------------------^",
 						"from": /(?<=if\()(_0x\w{6})\[_0x\w{6}\(0x\w{3}\)\]\[_0x\w{6}\(0x\w{2}\)\]\(_0x\w{6}\(0x\w{2}\)\)(?=\))/u,
 						"to": function(_, url) {
-							return "/escape-hatch\\//u.test(" + url + ")";
+							return url + ".pathname.startsWith('/TypeCraft/proxy/')&&!" + url + ".pathname.startsWith('/TypeCraft/proxy/escape-hatch/')";
 						}
 					},
 					{
@@ -198,7 +186,7 @@ const addresses = {
 						"doc": "                            ^-------^             ><",
 						"from": /(?<=let _0x\w{6}=_0x\w{6}\((_0x\w{6}),location\);if\()(?=_0x\w{6}==null\|\|isNaN\(_0x\w{6}\)\))/u,
 						"to": function(_, url) {
-							return "/escape-hatch\\//u.test(" + url + ")||";
+							return url + ".pathname.startsWith('/TypeCraft/proxy/escape-hatch')||";
 						}
 					}
 				],
@@ -256,134 +244,6 @@ const addresses = {
 			});
 		}
 	},
-	/*
-	"https://stackblitz.com/edit/stackblitz-webcontainer-api-starter-1dztjd": {
-		"precondition": function(page: Page) {
-			return page.frameLocator("iframe[title='Preview page']").frameLocator("#app iframe").getByText("Welcome to a WebContainers app! 🥳").click();
-		},
-		"onIntercept": function(filePath, data) {
-			let fileName = path.basename(filePath);
-
-			if (!filePath.endsWith(path.join("blitz", fileName))) {
-				return [];
-			}
-
-			filePath = path.join(path.dirname(filePath).replace(/staticblitz/u, "stackblitz"), fileName);
-
-			if (!fileName.includes("a12d8c69")) {
-				// WARN: This is not perfect.
-				fileName = fileName.replace(/[-.]\w+(?=\.\w+$)/u, "");
-				filePath = path.join(path.dirname(filePath), fileName);
-			}
-
-			if (fileName === "headless.html") {
-				data = prune(data, {
-					"prepend": [
-						"<link href=\"https://cdn.jsdelivr.net/npm/modern-normalize/modern-normalize.min.css\" rel=\"stylesheet\" />",
-						"<base href=\"/vendor/stackblitz/\" />"
-					].join("")
-				});
-			}
-
-			const allowlist = {
-				"fetch.worker.a12d8c69.js": [],
-				"headless.html": [
-					{
-						"example": "webcontainer.js",
-						"doc": "    ^-------------^",
-						"from": /webcontainer\.js/u,
-						"to": "webcontainer.a12d8c69.js"
-					}
-				],
-				"headless.js": [
-					{
-						"example": "n.embedder",
-						"doc": "    ^--------^",
-						"from": /n\.embedder/gu,
-						"to": "location.origin"
-					},
-					{
-						"example": "n.baseUrl",
-						"doc": "    ^-------^",
-						"from": /n\.baseUrl/u,
-						"to": "'https://w-corp.staticblitz.com'"
-					},
-					{
-						"example": "n.serverUrl",
-						"doc": "    ^---------^",
-						"from": /n\.serverUrl/u,
-						"to": "'https://local-corp.webcontainer.io'"
-					},
-					{
-						"example": "n.serverVersion",
-						"doc": "    ^-------------^",
-						"from": /n\.serverVersion/u,
-						"to": "'a12d8c69'"
-					},
-					{
-						"example": "n.version",
-						"doc": "    ^-------^",
-						"from": /n\.version/u,
-						"to": "'a12d8c69'"
-					},
-					{
-						"example": "n.isolationPolicy",
-						"doc": "    ^---------------^",
-						"from": /n.isolationPolicy/u,
-						"to": "'require-corp'"
-					},
-				],
-				"webcontainer.a12d8c69.js": [
-					{
-						"example": "_0x3f0493=[new URL('/bin_index.a12d8c69',_0x122f9f)['href'],...null!=_0x467f25?_0x467f25:[]];",
-						"doc": "               ^------------------------------------------------------------------------------^",
-						"from": /(?<=_0x\w{6}=\[)new URL\(.*?(?=\];)/u,
-						"to": "location.origin + '/w-corp.staticblitz/bin_index.a12d8c69'"
-					},
-					{
-						"example": "'https://t.staticblitz.com",
-						"doc": "    ^------------------------^",
-						"from": /'https:\/\/t\.staticblitz\.com/u,
-						"to": "location.origin + '/t.staticblitz"
-					},
-					{
-						"example": "'/fetch.worker.a12d8c69.js'",
-						"doc": "    ^------------------------^",
-						"from": /'\/fetch\.worker\.a12d8c69\.js/u,
-						"to": "'/w-corp.staticblitz/fetch.worker.a12d8c69.js"
-					}
-				],
-				"bin_index.a12d8c69": []
-			};
-
-			if (allowlist[fileName] === undefined) {
-				return [];
-			}
-
-			for (const substitution of allowlist[fileName]) {
-				data = replace(data, substitution);
-			}
-
-			return [filePath, data];
-		},
-		"postcondition": function(vendorDirectory) {
-			const files = [
-				"bin_index.a12d8c69",
-				"fetch.worker.a12d8c69.js",
-				"headless.html",
-				"webcontainer.a12d8c69.js"
-			];
-
-			const results = files.map(function(fileName) {
-				return existsSync(path.join(vendorDirectory, "stackblitz", fileName));
-			});
-
-			return results.every(function(exists) {
-				return exists;
-			});
-		}
-	},
-	*/
 	"http://localhost:8000/": {
 		"precondition": function(page: Page) {
 			// WARN: This is testing more than the minimum.
