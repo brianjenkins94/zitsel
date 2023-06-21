@@ -199,7 +199,15 @@ const addresses = {
 					}
 				],
 				"brotli_wasm_bg.wasm": [],
-				"worker.js": [],
+				"worker.js": [
+					// https://github.com/codesandbox/nodebox-runtime/issues/40
+					{
+						"example": "'//'+_0x441ac2[_0xde1365(0x1059)]+(_0x441ac2[_0xde1365(0x887)]?':'",
+						"doc": "                  ^-----------------^",
+						"from": /(?<='\/\/'\+_0x\w{6})\[_0x\w{6}\(0x\w{4}\)\]/u,
+						"to": ".hostname"
+					}
+				],
 				"bridge.html": [],
 				"index.html": [],
 				"preview.html": [
