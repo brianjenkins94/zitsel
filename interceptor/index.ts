@@ -192,17 +192,15 @@ const addresses = {
 						"to": function(_, url) {
 							return "/\\/vendor\\/codesandbox\\/(?!escape-hatch\\/)/u.test(" + url + ")";
 						}
-					}
-					/*
+					},
 					{
 						"example": "let _0x5a79f9=_0x3c9189(_0x5c948f,location);if(_0x5a79f9==null||isNaN(_0x5a79f9))",
 						"doc": "                            ^-------^             ><",
 						"from": /(?<=let _0x\w{6}=_0x\w{6}\((_0x\w{6}),location\);if\()(?=_0x\w{6}==null\|\|isNaN\(_0x\w{6}\)\))/u,
 						"to": function(_, url) {
-							return url + ".pathname.startsWith('/TypeCraft/proxy/escape-hatch')||";
+							return "!/escape-hatch\\//u.test(" + url + ")||";
 						}
 					}
-					*/
 				],
 				"__csb_runtime.js": [
 					{
