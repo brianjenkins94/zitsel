@@ -30,8 +30,8 @@ export async function get(request, response) {
 			import * as url from "url";
 
 			const location = globalThis.location;
-			const BASE_URL = "http://localhost:8000";
-			const BASE_PATH = location.href.substring(location.origin.length, location.href.lastIndexOf("/"));
+			const BASE_URL = location.origin;
+			const BASE_PATH = new URL(".", location.href).pathname;
 
 			const router = {
 				[BASE_PATH + "/"]: function(request, response) {
