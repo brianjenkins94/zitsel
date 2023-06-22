@@ -178,8 +178,8 @@ const addresses = {
 						"doc": "       ^-----------------------------------------------------------^",
 						"from": /(?<=if\()(_0x\w{6})\[_0x\w{6}\(0x\w{3}\)\]\[_0x\w{6}\(0x\w{2}\)\]\(_0x\w{6}\(0x\w{2}\)\)(?=\))/u,
 						"to": function(_, url) {
-							//return url + ".pathname.startsWith(new URL('.',location.href).pathname)&&!" + url + ".pathname.startsWith(new URL('.',location.href).pathname+'escape-hatch/')";
-							return url + ".pathname.startsWith('/TypeCraft/proxy/')&&!" + url + ".pathname.startsWith('/TypeCraft/proxy/escape-hatch/')";
+							return url + ".pathname.startsWith(new URL('.',location.href).pathname)&&!" + url + ".pathname.startsWith(new URL('.',location.href).pathname+'escape-hatch/')";
+							//return url + ".pathname.startsWith('/TypeCraft/proxy/')&&!" + url + ".pathname.startsWith('/TypeCraft/proxy/escape-hatch/')";
 						}
 					},
 					{
