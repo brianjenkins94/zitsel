@@ -115,30 +115,6 @@ server.get("/zitsel/*", createProxyMiddleware({
 	"target": "http://localhost:8000"
 }));
 
-/*
-server.use("/t.staticblitz", createProxyMiddleware({
-	"pathRewrite": {
-		"^/t.staticblitz": ""
-	},
-	"target": "https://t.staticblitz.com",
-	"changeOrigin": true
-}));
-
-server.use("/w-corp.staticblitz", createProxyMiddleware({
-	"pathRewrite": {
-		"^/w-corp.staticblitz": ""
-	},
-	"target": "https://w-corp.staticblitz.com",
-	"changeOrigin": true
-}));
-
-server.get("/.localservice@preview.shared_worker.a12d8c69.js", async function(request, response) {
-	//response.setHeader("Content-Type", "text/javascript");
-	response.type("text/javascript");
-	response.send(await (await fetch("https://local.webcontainer.io/.localservice@preview.shared_worker.a12d8c69.js")).text());
-});
-*/
-
 server.listen(new URL(BASE_URL).port, function() {
 	console.log("> Ready on " + BASE_URL);
 });
