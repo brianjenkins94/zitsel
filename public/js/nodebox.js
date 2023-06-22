@@ -20,4 +20,4 @@ const { id } = await shell.runCommand("node", ["index.js"]);
 
 const { url } = await nodebox.preview.getByShellId(id);
 
-previewIframe.setAttribute("src", BASE_URL + "/vendor/codesandbox/escape-hatch/preview.html");
+previewIframe.setAttribute("src", BASE_URL + "/vendor/codesandbox/preview.html");
