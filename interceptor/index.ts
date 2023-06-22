@@ -203,8 +203,8 @@ const addresses = {
 					// https://github.com/codesandbox/nodebox-runtime/issues/40
 					{
 						"example": "'//'+_0x441ac2[_0xde1365(0x1059)]+(_0x441ac2[_0xde1365(0x887)]?':'",
-						"doc": "                  ^-----------------^",
-						"from": /(?<='\/\/'\+_0x\w{6})\[_0x\w{6}\(0x\w{4}\)\]/u,
+						"doc": "                  ^------------------^",
+						"from": /(?<='\/\/'\+_0x\w{6})\[_0x\w{6}\(0x\w{4}\)\]\+/u,
 						"to": ".hostname+':'+"
 					}
 				],
