@@ -178,7 +178,7 @@ const addresses = {
 						"doc": "       ^-----------------------------------------------------------^",
 						"from": /(?<=if\()(_0x\w{6})\[_0x\w{6}\(0x\w{3}\)\]\[_0x\w{6}\(0x\w{2}\)\]\(_0x\w{6}\(0x\w{2}\)\)(?=\))/u,
 						"to": function(_, url) {
-							return "!/escape-hatch\\//u.test(" + url + ")";
+							return "!/escape-hatch\\//u.test(" + url + ")&&" + url.startsWith("/__csb");
 						}
 					},
 					{
