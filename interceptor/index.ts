@@ -157,6 +157,12 @@ const addresses = {
 						"doc": "    ^-----------^",
 						"from": /\{'scope':'\/'\}/u,
 						"to": "{'scope':'.'}"
+					},
+					{
+						"example": "{'workerUrl':_0x2dca1e}",
+						"doc": "                 ^-------^",
+						"from": /(?<=\{'workerUrl':)_0x\w{6}(?=\})/u,
+						"to": "'__csb_sw.js'"
 					}
 				],
 				"__csb_sw.js": [
