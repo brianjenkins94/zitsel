@@ -29,9 +29,9 @@ export async function get(request, response) {
 			import * as path from "path";
 			import * as url from "url";
 
-			const location = globalThis.location;
+			const location = new URL(".", globalThis.location.href.endsWith("/") ? globalThis.location.href.slice(0, -1) : globalThis.location.href);
 			const BASE_URL = location.origin;
-			const BASE_PATH = new URL(".", location.href).pathname;
+			const BASE_PATH = location.pathname;
 
 			const router = {
 				[BASE_PATH + "/"]: function(request, response) {
@@ -82,8 +82,8 @@ export async function get(request, response) {
 					});
 
 					if (request.url.startsWith(BASE_PATH + "/escape-hatch")) {
-						//request.url = request.url
-						//  .replace(/escape-hatch\\//u, "");
+						request.url = request.url
+							.replace(/escape-hatch\\//u, "");
 
 						proxy.web(request, response);
 
