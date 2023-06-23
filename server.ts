@@ -108,6 +108,13 @@ async function bindRoutes(routesDirectory) {
 
 await bindRoutes(path.join(__root, "routes"));
 
+server.get("/zitsel/escape-hatch/*", createProxyMiddleware({
+	"pathRewrite": {
+		"^/zitsel/escape-hatch": ""
+	},
+	"target": "http://localhost:8000"
+}));
+
 server.get("/zitsel/*", createProxyMiddleware({
 	"pathRewrite": {
 		"^/zitsel": ""

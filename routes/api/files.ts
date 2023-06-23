@@ -29,7 +29,7 @@ export async function get(request, response) {
 			import * as path from "path";
 			import * as url from "url";
 
-			const location = new URL(".", globalThis.location.href.endsWith("/") ? globalThis.location.href.slice(0, -1) : globalThis.location.href);
+			const location = new URL("/zitsel", globalThis.location.origin);
 			const BASE_URL = location.origin;
 			const BASE_PATH = location.pathname;
 
@@ -60,6 +60,17 @@ export async function get(request, response) {
 						},
 						"body": await fs.readFile("public/js/main.js")
 					};
+				},
+				[BASE_PATH + "/api/ping"]: async function(request, response) {
+					const pingResponse = await fetch(BASE_PATH + "/escape-hatch/api/ping");
+
+					return {
+						"statusCode": pingResponse.status,
+						"headers": {
+							"Content-Type": pingResponse.headers["Content-Type"] ?? "text/plain"
+						},
+						"body": await pingResponse.text()
+					};
 				}
 			};
 
@@ -77,18 +88,20 @@ export async function get(request, response) {
 				let body;
 
 				try {
-					const [pathName] = Object.keys(router).filter(function(route) {
-						return pathToRegExp(route).test(BASE_PATH + request.url);
-					});
-
-					if (request.url.startsWith(BASE_PATH + "/escape-hatch")) {
+					if (request.url.startsWith(BASE_PATH + "/escape-hatch/")) {
 						request.url = request.url
 							.replace(/escape-hatch\\//u, "");
 
 						proxy.web(request, response);
 
 						return;
-					} else if (request.method === "GET" && router[pathName] !== undefined) {
+					}
+
+					const [pathName] = Object.keys(router).filter(function(route) {
+						return pathToRegExp(route).test(BASE_PATH + request.url);
+					});
+
+					if (request.method === "GET" && router[pathName] !== undefined) {
 						({ statusCode, headers, body } = await router[pathName](request, response));
 					}
 
