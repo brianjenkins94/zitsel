@@ -196,12 +196,6 @@ const addresses = {
 						"doc": "           ^--------------------------------------------------------------^",
 						"from": /(?<=return )_0x\w{6}===_0x\w{6}\?_0x\w{6}\(_0x\w{6}\[_0x\w{6}\(0x\w{2}\)\]\):null(?=;)/u,
 						"to": "8000"
-					},
-					{
-						"example": "if(!navigator['serviceWorker'][_0xb32392(0xe6)]){console['error'](_0xb32392(0xf4));return;}",
-						"doc": "    ^-----------------------------------------------------------------------------------------^",
-						"from": /if\(!navigator\['serviceWorker'\]\[_0x\w{6}\(0x\w{2}\)\]\)\{console\['error'\]\(_0x\w{6}\(0x\w{2}\)\);return;\}/u,
-						"to": ""
 					}
 				],
 				"brotli_wasm_bg.wasm": [],
