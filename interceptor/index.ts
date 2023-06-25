@@ -153,10 +153,10 @@ const addresses = {
 						"to": "__csb_sw.js"
 					},
 					{
-						"example": "{'scope':'/'}",
-						"doc": "    ^-----------^",
-						"from": /\{'scope':'\/'\}/u,
-						"to": "{'scope':'.'}"
+						"example": "await navigator[_0x100c1b(0x2c6)][_0x100c1b(0x1a0)](_0x100c1b(0x193),{'scope':'/'});",
+						"doc": "                                                        ^----------------------------^",
+						"from": /(?<=await navigator\[_0x\w{6}\(0x\w{3}\)\]\[_0x\w{6}\(0x\w{3}\)\]\()_0x\w{6}\(0x\w{3}\),\{'scope':'\/'\}(?=\);)/u,
+						"to": "new URL('../../__csb_sw.js', location.href).href, {'scope':'../../'}"
 					}
 				],
 				"__csb_sw.js": [
@@ -228,13 +228,18 @@ const addresses = {
 				data = replace(data, substitution);
 			}
 
+			// Service Worker scope is dictated by its path.
+			if (fileName === "__csb_sw.js") {
+				filePath = path.join(path.dirname(filePath), "..", "..", fileName);
+			}
+
 			return [filePath, data];
 		},
 		"postcondition": function(vendorDirectory) {
 			const files = [
 				"__csb_bridge.js",
 				"__csb_runtime.js",
-				"__csb_sw.js",
+				"../../__csb_sw.js",
 				"bridge.html",
 				"brotli_wasm_bg.wasm",
 				"index.html",
