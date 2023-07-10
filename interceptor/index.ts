@@ -181,7 +181,7 @@ const addresses = {
 						"doc": "                            ^-------^             ><",
 						"from": /(?<=let _0x\w{6}=_0x\w{6}\((_0x\w{6}),location\);if\()(?=_0x\w{6}==null\|\|isNaN\(_0x\w{6}\)\))/u,
 						"to": function(_, url) {
-							return url + ".includes('/escape-hatch/')||";
+							return url + "pathname.includes('/escape-hatch/')||";
 						}
 					}
 				],
