@@ -166,12 +166,6 @@ const addresses = {
 						"from": /\+_0x\w{6}\['split'\]\('\.'\)\[0x0\]\[_0x68d8a2\(0x122\)\]\('-'\)\[0x1\]/u,
 						"to": "8000"
 					},
-					{
-						"example": "/__csb_runtime.8khva2zw4nsr5iciw79jxa2txw3l9vp.js",
-						"doc": "    ^-----------------------------------------------^",
-						"from": /\/__csb_runtime(\.\w+)?\.js/u,
-						"to": "__csb_runtime.js"
-					},
 					// These last two add an escape hatch for proxying requests outside of the nodebox.
 					{
 						//                      .pathname         .startsWith(      '/__csb'       )
@@ -179,7 +173,7 @@ const addresses = {
 						"doc": "       ^-----------------------------------------------------------^",
 						"from": /(?<=if\()(_0x\w{6})\[_0x\w{6}\(0x\w{3}\)\]\[_0x\w{6}\(0x\w{2}\)\]\(_0x\w{6}\(0x\w{2}\)\)(?=\))/u,
 						"to": function(_, url) {
-							return "false";
+							return url + ".pathname.includes('/vendor/codesandbox/')&&!" + url + ".pathname.includes('/escape-hatch/'))";
 						}
 					},
 					{
