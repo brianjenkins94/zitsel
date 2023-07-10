@@ -174,11 +174,12 @@ const addresses = {
 					},
 					// These last two add an escape hatch for proxying requests outside of the nodebox.
 					{
+						//                      .pathname         .startsWith(      '/__csb'       )
 						"example": "if(_0x5c948f[_0x10fc7d(0x103)][_0x10fc7d(0xd1)](_0x10fc7d(0xd5)))",
 						"doc": "       ^-----------------------------------------------------------^",
 						"from": /(?<=if\()(_0x\w{6})\[_0x\w{6}\(0x\w{3}\)\]\[_0x\w{6}\(0x\w{2}\)\]\(_0x\w{6}\(0x\w{2}\)\)(?=\))/u,
 						"to": function(_, url) {
-							return url + ".pathname.startsWith('/zitsel/vendor/codesandbox/')&&!/escape-hatch\\//u.test(" + url + ")";
+							return "false";
 						}
 					},
 					{
